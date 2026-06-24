@@ -108,6 +108,24 @@ function lockZoom(win) {
   })
 }
 
+function attachWindowDiagnostics(win, name) {
+  const contents = win.webContents
+
+  contents.on('console-message', (_event, level, message, line, sourceId) => {
+    console.log(`[renderer:${name}] level=${level} ${sourceId}:${line} ${message}`)
+  })
+
+  contents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
+    console.log(
+      `[renderer:${name}] did-fail-load code=${errorCode} url=${validatedURL} error=${errorDescription}`
+    )
+  })
+
+  contents.on('render-process-gone', (_event, details) => {
+    console.log(`[renderer:${name}] render-process-gone reason=${details.reason}`)
+  })
+}
+
 function createVideo() {
   const frame = !isMac
 
@@ -124,6 +142,7 @@ function createVideo() {
   )
 
   lockZoom(videoWindow)
+  attachWindowDiagnostics(videoWindow, 'video')
   loadWindowRoute(videoWindow, 'video')
   videoWindow.setOpacity(1)
   videoWindow.setAlwaysOnTop(true)
@@ -149,6 +168,7 @@ function createPdf() {
   )
 
   lockZoom(pdfWindow)
+  attachWindowDiagnostics(pdfWindow, 'pdf')
   loadWindowRoute(pdfWindow, 'pdf')
   pdfWindow.setOpacity(1)
   pdfWindow.setAlwaysOnTop(true)
@@ -181,6 +201,7 @@ function createWeb() {
   )
 
   lockZoom(webWindow)
+  attachWindowDiagnostics(webWindow, 'web')
   loadWindowRoute(webWindow, 'web')
   webWindow.setOpacity(1)
   webWindow.setAlwaysOnTop(true)
@@ -202,6 +223,7 @@ function createSoSetting() {
   )
 
   lockZoom(soWindow)
+  attachWindowDiagnostics(soWindow, 'so')
   loadWindowRoute(soWindow, 'so')
   soWindow.on('closed', () => {
     soWindow = null
@@ -213,7 +235,7 @@ function createWindowSetting() {
     baseWindowOptions({
       title: '设 置',
       width: 715,
-      height: 630,
+      height: 660,
       resizable: false,
       maximizable: false,
       minimizable: false
@@ -221,6 +243,7 @@ function createWindowSetting() {
   )
 
   lockZoom(settingWindow)
+  attachWindowDiagnostics(settingWindow, 'setting')
   loadWindowRoute(settingWindow, 'setting')
   settingWindow.on('closed', () => {
     settingWindow = null
@@ -262,6 +285,7 @@ function createWindowDesktop() {
   )
 
   lockZoom(desktopWindow)
+  attachWindowDiagnostics(desktopWindow, 'desktop')
   loadWindowRoute(desktopWindow, 'desktop')
   desktopWindow.setAlwaysOnTop(true)
   desktopWindow.setSkipTaskbar(true)
@@ -292,6 +316,7 @@ function createWindowBarDesktop() {
 
   desktopBarWindow.setTouchBar(createTouchBarText())
   lockZoom(desktopBarWindow)
+  attachWindowDiagnostics(desktopBarWindow, 'desktop-bar')
   loadWindowRoute(desktopBarWindow, 'desktop')
   desktopBarWindow.setAlwaysOnTop(true)
   desktopBarWindow.setSkipTaskbar(true)

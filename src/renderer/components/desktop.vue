@@ -10,7 +10,7 @@
         @contextmenu.prevent="onMouse(2)"
         @mouseover="onMouse(3)"
         @mouseout="onMouse(4)"
-        @dbclick.prevent="onMouse(5)"
+        @dblclick.prevent="onMouse(5)"
         v-show="is_mouse_model=='1'"
       >{{text}}</div>
 
