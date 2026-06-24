@@ -10,7 +10,7 @@
             placeholder="请选择小说路径"
             prefix-icon="el-icon-tickets"
           >
-            <template slot="prepend">
+            <template #prepend>
               <el-checkbox
                 :border="true"
                 size="mini"
@@ -275,9 +275,9 @@
 </template>
 
 <script>
-import db from "../../main/utils/db";
+import db from "../utils/db";
 import dialog from "../utils/dialog";
-import { ipcRenderer, shell } from "electron";
+import { ipcRenderer, shell } from "../utils/electron";
 import hotkeys from "hotkeys-js";
 
 export default {
@@ -312,7 +312,9 @@ export default {
       keyBoss: "CmdOrCtrl+Alt",
       keyBossX: "",
       keyAuto: "CmdOrCtrl+Alt",
-      keyAutoX: ""
+      keyAutoX: "",
+      key_type: 0,
+      lmchecked: false
     };
   },
   created() {

@@ -7,7 +7,7 @@
         placeholder="请输入URL"
         clearable
         size="mini"
-        @keyup.enter.native="onSo"
+        @keyup.enter="onSo"
       ></el-input>
     </div>
     <webview
@@ -22,7 +22,7 @@
 
 <script>
 import hotkeys from "hotkeys-js";
-import { ipcRenderer } from "electron";
+import { ipcRenderer } from "../utils/electron";
 
 export default {
   name: "web",

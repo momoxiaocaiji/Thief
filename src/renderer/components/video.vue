@@ -3,7 +3,9 @@
     <div class="divx"></div>
     <div class="setting" v-if="is_setting">
       <el-input placeholder="请选择本地视频" v-model="input" class="input-with-select" size="mini">
-        <el-button slot="append" icon="el-icon-folder-opened" @click="onSelect"></el-button>
+        <template #append>
+          <el-button icon="FolderOpened" @click="onSelect"></el-button>
+        </template>
       </el-input>
     </div>
     <div class="videox" v-if="url">
@@ -13,10 +15,10 @@
 </template>
 
 <script>
-import fs from "fs";
 import hotkeys from "hotkeys-js";
-import { ipcRenderer } from "electron";
+import { ipcRenderer } from "../utils/electron";
 import dialog from "../utils/dialog";
+import file from "../utils/file";
 
 export default {
   name: "video",
@@ -32,8 +34,8 @@ export default {
   },
   methods: {
     getUrl() {
-      var data = fs.readFileSync(this.input);
-      let url = window.URL.createObjectURL(new Blob([data]));
+      const data = file.readFileBuffer(this.input);
+      const url = window.URL.createObjectURL(new Blob([data]));
       this.url = url;
     },
     onSelect() {

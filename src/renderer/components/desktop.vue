@@ -20,9 +20,8 @@
 </template>
 
 <script>
-import db from "../../main/utils/db";
-import { ipcRenderer, remote } from "electron";
-import { on } from "cluster";
+import db from "../utils/db";
+import { ipcRenderer, remote } from "../utils/electron";
 
 export default {
   name: "desktop",

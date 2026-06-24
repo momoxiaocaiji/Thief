@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import db from "../../main/utils/db";
-import book from "../../main/utils/book";
-import { ipcRenderer } from "electron";
+import db from "../utils/db";
+import book from "../utils/book";
+import { ipcRenderer } from "../utils/electron";
 
 export default {
   name: "so",

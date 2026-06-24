@@ -6,10 +6,12 @@
         placeholder="请选择本地PDF"
         v-model="input"
         class="input-with-select"
-        @keyup.enter.native="onSo"
+        @keyup.enter="onSo"
         size="mini"
       >
-        <el-button slot="append" icon="el-icon-folder-opened" @click="onSelect"></el-button>
+        <template #append>
+          <el-button icon="FolderOpened" @click="onSelect"></el-button>
+        </template>
       </el-input>
     </div>
     <div v-loading="loading" v-if="pdfurl" class="center">
@@ -19,11 +21,14 @@
 </template>
 
 <script>
-import fs from "fs";
 import hotkeys from "hotkeys-js";
-import { ipcRenderer } from "electron";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { ipcRenderer } from "../utils/electron";
 import dialog from "../utils/dialog";
-import PDFJS from "pdfjs-dist";
+import file from "../utils/file";
+
+GlobalWorkerOptions.workerSrc = workerUrl;
 
 export default {
   name: "pdf",
@@ -59,7 +64,7 @@ export default {
       const canvas = document.getElementById(`the-canvas-${num}`);
       // Using promise to fetch the page
       this.pdfDoc.getPage(num).then(page => {
-        const viewport = page.getViewport(vm.scale);
+        const viewport = page.getViewport({ scale: vm.scale });
         // alert(vm.canvas.height)
         canvas.height = viewport.height;
         canvas.width = viewport.width;
@@ -93,9 +98,9 @@ export default {
       const vm = this;
       this.loading = true;
       vm.canvasData = [];
-      var data = fs.readFileSync(vm.pdfurl);
-      var typedarray = new Uint8Array(data);
-      PDFJS.getDocument(typedarray)
+      const data = file.readFileBuffer(vm.pdfurl);
+      const typedarray = new Uint8Array(data);
+      getDocument({ data: typedarray })
         .then(pdfDoc_ => {
           // 初始化pdf
           vm.pdfDoc = pdfDoc_;

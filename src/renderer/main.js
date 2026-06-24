@@ -1,23 +1,14 @@
-import Vue from 'vue'
-
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-
+import { createApp } from 'vue'
+import ElementPlus, { ElMessage } from 'element-plus'
+import 'element-plus/dist/index.css'
 import axios from 'axios'
-import App from './App'
+import App from './App.vue'
 import router from './router'
-import store from './store'
 
-Vue.use(ElementUI);
+const app = createApp(App)
 
-if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = false
-
-/* eslint-disable no-new */
-new Vue({
-  components: { App },
-  router,
-  store,
-  template: '<App/>'
-}).$mount('#app')
+app.use(ElementPlus)
+app.use(router)
+app.config.globalProperties.$http = axios
+app.config.globalProperties.$message = ElMessage
+app.mount('#app')
