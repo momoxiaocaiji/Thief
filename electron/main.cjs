@@ -99,8 +99,12 @@ function lockZoom(win) {
   const contents = win.webContents
   contents.on('did-finish-load', () => {
     contents.setZoomFactor(1)
-    contents.setVisualZoomLevelLimits(1, 1)
-    contents.setLayoutZoomLevelLimits(0, 0)
+    if (typeof contents.setVisualZoomLevelLimits === 'function') {
+      contents.setVisualZoomLevelLimits(1, 1).catch(() => {})
+    }
+    if (typeof contents.setLayoutZoomLevelLimits === 'function') {
+      contents.setLayoutZoomLevelLimits(0, 0).catch(() => {})
+    }
   })
 }
 
